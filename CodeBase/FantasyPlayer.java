@@ -1,20 +1,25 @@
 
 public class FantasyPlayer {
 	
-	private int totalTouchdowns;
-	private int scrimmageYards;
+	private String name;
+	private String position;
 	private String team;
+	private int reliabilityScore;
 	
-	public int getTotalTouchdowns() {return totalTouchdowns;}
+	public String getName() {return name;}
 	
-	public int getScrimmageYards() {return scrimmageYards;}
+	public String getPosition() {return position;}
 	
 	public String getTeam() {return team;}
+
+	public int getReliabilityScore() {return reliabilityScore;}
 	
-	public void setTotalTouchdowns(int totalTouchdowns) {this.totalTouchdowns = totalTouchdowns;}
+	public void setName (String name) {this.name = name;}
 	
-	public void setScrimmageYards(int scrimmageYards) {this.scrimmageYards = scrimmageYards;}
+	public void setPosition(String position) {this.position = position;}
 	
-	public void setTeam(String team) {this.team = team;}
+	public void setTeam(String team) {this.team = team;}	
+	
+	public void setReliabilityScore(int reliabilityScore) {this.reliabilityScore = reliabilityScore;}
 
 }

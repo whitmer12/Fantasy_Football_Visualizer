@@ -6,29 +6,109 @@ public class Driver extends JFrame {
    // Define canvas size constants
    public static final int CANVAS_WIDTH  = 1500;
    public static final int CANVAS_HEIGHT = 750;
- 
-   // Declare an instance of the drawing canvas
-   private DrawCanvas canvas;
+  int pageFlag = 1;
+  
+  SkillPosition player1 = new SkillPosition();
+
  
    public Driver() {
-      canvas = new DrawCanvas();    // Construct the drawing canvas
-      canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-      
-      Container cp = getContentPane();
-      cp.add(canvas);
- 
-      setDefaultCloseOperation(EXIT_ON_CLOSE);   // Handle the CLOSE button
-      pack();              // Sets the size of the canvas
-      setTitle("Fantasy Football Visualizer");
-      setVisible(true);
+
+	   
+	   
+	   player1.setName("");
+	   player1.setName("David Johnson");
+	   player1.setPosition("Running Back");
+	   player1.setTeam("Cardinals");
+	   player1.setScrimmageYards(100);
+	   player1.setTouchdowns(2);
+	   player1.setTouches(20);
+	   player1.setReliabilityScore(10);
+	   
+	   Container cp = getContentPane();
+
+	      if(pageFlag == 0) {
+	    	  
+	    	 
+	    	  EnterFields canvas = new EnterFields();
+		      canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+		      
+		      JButton b1 = new JButton("Submit Player Info");
+		      b1.setBounds(950, 650, 200, 50);
+		      b1.setMnemonic(KeyEvent.VK_D);
+		      b1.setActionCommand("Submit");   
+		      //b1.addActionListener(new Submit());
+		      
+		      cp.add(b1);
+		      cp.add(canvas);
+		      
+		  }else {
+			  DrawGraphs canvas = new DrawGraphs(player1);
+		      canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+		      
+		      JButton b1 = new JButton("Enter New Player");
+		      b1.setBounds(950, 650, 200, 50);
+		      b1.setMnemonic(KeyEvent.VK_D);
+		      b1.setActionCommand("Clear");
+		      //b1.addActionListener(new Clear());
+		      
+		      cp.add(b1);
+		      cp.add(canvas);	      
+	      
+		  }
+	      
+	      setDefaultCloseOperation(EXIT_ON_CLOSE);   // Handle the CLOSE button
+	      pack();              // Sets the size of the canvas
+	      setTitle("Fantasy Football Visualizer");
+	      setVisible(true);
+	  
+	  
    }
    
-   private class DrawCanvas extends JPanel {
+   
+   private class EnterFields extends JPanel{
 	   
+	   
+	   private void EnterFields(Graphics g) {
+		   
+		   g.drawString("Works!", 50, 50);
+		   
+	   }
+
+	   
+	   public void paintComponent(Graphics g) {
+		   super.paintComponent(g);
+	       setBackground(Color.WHITE);  // set background color for this JPanel
+	  
+           g.setColor(Color.BLACK);
+	       g.setFont(new Font("Monospaced", Font.BOLD, 12));
+	       
+	       EnterFields(g);
+	          
+	    }
+	   
+   }
+   
+   
+   
+   private class DrawGraphs extends JPanel {
+	   
+	   SkillPosition player1;
 	   
 	   /*
-	    * TODO: Get current week from user input to draw out x-axis of graphs
+	    * TODO: put up first page with certain amount of input boxes
+	    * put a button click to submit for new player
+	    * on button click make a player and then draw graphs 
 	    */
+	   
+	   
+	   public DrawGraphs(SkillPosition player1) {
+		   
+		this.player1 = player1;
+	   }
+
+	/*
+	    * TODO: Get current week from user input to draw out x-axis of graphs
+	    */	  
 	   
 	   private int xRange = 500;
 	   private int yRange = 300;
@@ -36,6 +116,15 @@ public class Driver extends JFrame {
 	   private int yTicSpace = xRange/4;
 	   
 	   private void drawGraph(int x1, int x2, int y1, int y2, Graphics g) {
+		   
+		  /*
+		   * TODO: Draw filled red ovals (really circles) wherever there belongs a point
+		   * TODO: Draw red lines between the players' point values
+		   * How to set color and then draw an oval:
+		   * g.setColor(Color.RED);
+		   * g.fillOval(300, 310, 30, 50);
+		   */
+		   
 		   g.drawLine(x1, y1, x1, y2);
 		   g.drawLine(x1, y2, x2, y2);		   
 		   
@@ -68,16 +157,11 @@ public class Driver extends JFrame {
 	   }
 	   
 	   private void drawGraph1(Graphics g) {
-		 /*
-		  * TODO: Draw filled red ovals (really circles) wherever there belongs a point
-		  * TODO: Draw red lines between the players' point values
-		  * How to set color and then draw an oval:
-		  		* g.setColor(Color.RED);
-		  		* g.fillOval(300, 310, 30, 50);
-		  */
-	     
-	     
-		 
+		   
+		 g.drawString(player1.getName(), 900, 500);
+		 g.drawString(player1.getTeam(), 900, 525);
+		 g.drawString(player1.getPosition(), 900, 550);
+	     		 
 		 int xInnerBound = 100;
 		 int xOuterBound = xInnerBound + xRange;
 		 int yInnerBound = 20;
@@ -114,6 +198,7 @@ public class Driver extends JFrame {
       // Override paintComponent to perform my own painting
       @Override
       public void paintComponent(Graphics g) {
+    	 super.paintComponent(g);
          setBackground(Color.WHITE);  // set background color for this JPanel
  
          g.setColor(Color.BLACK);
