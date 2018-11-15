@@ -1,6 +1,10 @@
 
 public class SkillPosition extends FantasyPlayer{
 	
+	public void SkillPosition(){
+		
+	}
+	
 	private int scrimmageYards;
 	private int touchdowns;
 	private int touches;

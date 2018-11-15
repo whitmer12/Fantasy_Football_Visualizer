@@ -6,94 +6,100 @@ public class Driver extends JFrame {
    // Define canvas size constants
    public static final int CANVAS_WIDTH  = 1500;
    public static final int CANVAS_HEIGHT = 750;
-  int pageFlag = 1;
   
-  SkillPosition player1 = new SkillPosition();
-
+   FantasyPlayer player1 = new FantasyPlayer();
  
-   public Driver() {
+   public Driver(){
 
-	   
-	   
-	   player1.setName("");
-	   player1.setName("David Johnson");
-	   player1.setPosition("Running Back");
-	   player1.setTeam("Cardinals");
-	   player1.setScrimmageYards(100);
-	   player1.setTouchdowns(2);
-	   player1.setTouches(20);
-	   player1.setReliabilityScore(10);
-	   
 	   Container cp = getContentPane();
-
-	      if(pageFlag == 0) {
-	    	  
-	    	 
-	    	  EnterFields canvas = new EnterFields();
-		      canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-		      
-		      JButton b1 = new JButton("Submit Player Info");
-		      b1.setBounds(950, 650, 200, 50);
-		      b1.setMnemonic(KeyEvent.VK_D);
-		      b1.setActionCommand("Submit");   
-		      //b1.addActionListener(new Submit());
-		      
-		      cp.add(b1);
-		      cp.add(canvas);
-		      
-		  }else {
-			  DrawGraphs canvas = new DrawGraphs(player1);
-		      canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-		      
-		      JButton b1 = new JButton("Enter New Player");
-		      b1.setBounds(950, 650, 200, 50);
-		      b1.setMnemonic(KeyEvent.VK_D);
-		      b1.setActionCommand("Clear");
-		      //b1.addActionListener(new Clear());
-		      
-		      cp.add(b1);
-		      cp.add(canvas);	      
-	      
-		  }
-	      
-	      setDefaultCloseOperation(EXIT_ON_CLOSE);   // Handle the CLOSE button
-	      pack();              // Sets the size of the canvas
-	      setTitle("Fantasy Football Visualizer");
-	      setVisible(true);
-	  
-	  
+	   cp.setPreferredSize(new Dimension(CANVAS_WIDTH/2, CANVAS_HEIGHT/2));
+	   cp.setBackground(Color.WHITE);
+	   pack();
+	   
+	   EnterFields canvas = new EnterFields();
+	   cp.add(canvas);
+	   
+	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   setVisible(true);
    }
    
-   
-   private class EnterFields extends JPanel{
+   private class EnterFields extends JPanel implements ActionListener{
+	   
+	   CreatePlayer p1;
+	   
+	   JButton submit = new JButton("Submit Info");
+	   JTextField playerName = new JTextField(20);
+	   JTextField playerTeam = new JTextField(20);
+	   JTextField playerPosition = new JTextField(2);
+	   JTextField playerYards = new JTextField(15);
+	   JTextField playerTouchdowns = new JTextField(15);
+	   JTextField playerAttempts = new JTextField(15);
+	   JTextField week = new JTextField(1);
 	   
 	   
-	   private void EnterFields(Graphics g) {
+	   public EnterFields() {
 		   
-		   g.drawString("Works!", 50, 50);
+		   this.setLayout(new GridLayout(0,2));
 		   
+		   this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
+		   this.setBackground(Color.white);
+		   this.setBounds(20, 20, 20, 20);
+		   
+		   submit.addActionListener(this);
+		   
+		   this.add(new JLabel("Player Name:"));
+		   this.add(playerName);
+		   
+		   this.add(new JLabel("Player Team:"));
+		   this.add(playerTeam);
+		   
+		   this.add(new JLabel("Player Position:"));
+		   this.add(playerPosition);
+		   
+		   this.add(new JLabel("Player Passing/Scrimmage Yards:"));
+		   this.add(playerYards);
+		   
+		   this.add(new JLabel("Player Passing/Total TDs:"));
+		   this.add(playerTouchdowns);
+		   
+		   this.add(new JLabel("Player Passes/touches:"));
+		   this.add(playerAttempts);
+		   
+		   this.add(new JLabel("Current Week:"));
+		   this.add(week);
+		   
+		   this.add(submit);
 	   }
-
 	   
-	   public void paintComponent(Graphics g) {
-		   super.paintComponent(g);
-	       setBackground(Color.WHITE);  // set background color for this JPanel
-	  
-           g.setColor(Color.BLACK);
-	       g.setFont(new Font("Monospaced", Font.BOLD, 12));
-	       
-	       EnterFields(g);
-	          
-	    }
+	   private void createPlayer() {
+		   p1 = new CreatePlayer(playerName.getText(), playerPosition.getText(), playerTeam.getText(), playerYards.getText(), playerTouchdowns.getText(), playerAttempts.getText(), week.getText());
+	   }
+ 	  	   
+	   public void actionPerformed(ActionEvent e) {
+		   createPlayer();
+		   
+		   this.removeAll();
+		   
+		   Container cp = getContentPane();
+		   
+		   DrawGraphs frame2 = new DrawGraphs(p1);
+		   cp.add(frame2);
+		   
+		   cp.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+		   pack();
+		   validate();
+		   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		   setVisible(true);
+	   }
 	   
    }
    
    
    
-   private class DrawGraphs extends JPanel {
+   
+   public class DrawGraphs extends JPanel {
 	   
-	   SkillPosition player1;
-	   
+	   CreatePlayer player1;
 	   /*
 	    * TODO: put up first page with certain amount of input boxes
 	    * put a button click to submit for new player
@@ -101,9 +107,8 @@ public class Driver extends JFrame {
 	    */
 	   
 	   
-	   public DrawGraphs(SkillPosition player1) {
-		   
-		this.player1 = player1;
+	   public DrawGraphs(CreatePlayer player1) {
+		   this.player1 = player1;
 	   }
 
 	/*
@@ -158,15 +163,16 @@ public class Driver extends JFrame {
 	   
 	   private void drawGraph1(Graphics g) {
 		   
-		 g.drawString(player1.getName(), 900, 500);
+		 /*g.drawString(player1.getName(), 900, 500);
 		 g.drawString(player1.getTeam(), 900, 525);
-		 g.drawString(player1.getPosition(), 900, 550);
+		 g.drawString(player1.getPosition(), 900, 550);*/
 	     		 
 		 int xInnerBound = 100;
 		 int xOuterBound = xInnerBound + xRange;
 		 int yInnerBound = 20;
 		 int yOuterBound = yInnerBound + yRange;
-		 
+		 //just for demo
+		 g.drawString(String.valueOf(player1.getWeek()), 500, 50);
 		 drawGraph(xInnerBound, xOuterBound, yInnerBound, yOuterBound, g);
 		 /*
 		 g.drawLine(30, 30, 30, 300);
@@ -200,7 +206,6 @@ public class Driver extends JFrame {
       public void paintComponent(Graphics g) {
     	 super.paintComponent(g);
          setBackground(Color.WHITE);  // set background color for this JPanel
- 
          g.setColor(Color.BLACK);
          g.setFont(new Font("Monospaced", Font.BOLD, 12));
 

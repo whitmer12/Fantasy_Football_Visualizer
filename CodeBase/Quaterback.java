@@ -1,5 +1,9 @@
 
 public class Quaterback extends FantasyPlayer {
+	
+	public Quaterback() {
+		
+	}
 
 	private int passingYards;
 	private int passingTouchdowns;

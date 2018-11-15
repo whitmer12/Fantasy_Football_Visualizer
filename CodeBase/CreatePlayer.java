@@ -1,7 +1,8 @@
 
 public class CreatePlayer {
 	
-	SkillPosition player1 = new SkillPosition();
+	public FantasyPlayer player1;
+	
 	private int week;
 	
 	public int getWeek() {return week;}
@@ -16,32 +17,40 @@ public class CreatePlayer {
 		player1.setTeam("");
 	}
 	
-	public void CreatePlayer(String name, String position, String team, int reliability, int yards, int TDs, int touches) {
-	
-	if(position == "Running Back" || position == "Tight End" || position == "Wide Reciever") {
-		this.player1 = returnSkillPlayer(name, position, team, reliability, yards, TDs, touches);
+	public CreatePlayer(String name, String position, String team, String yards, String TDs, String touches, String week) {
+		
+		
+		//for demo:
+		this.week = Integer.parseInt(week);
+		
+		if(position.equalsIgnoreCase("RB") || position.equalsIgnoreCase("TE") || position.equalsIgnoreCase("WR")) {
+			player1 = new SkillPosition();
+			
+			/*TODO:
+			 * 
+			 * create constructors for skillpositions and quarterbacks that take in yardage data
+			 * create the new skill position players with populated fields
+			 * 
+			 */
+			
+			player1.setName(name);
+			player1.setPosition(position);
+			player1.setTeam(team);
+			
+			//for demo:
+			System.out.println(player1.getName() + "   " + player1.getPosition());
+			
+		}else if(position.equals("QB")){
+			player1 = new Quaterback();
+		}
+		
 	}
-		
-		
-		
-	}
 	
+	public CreatePlayer() {
+	}
+
 	public FantasyPlayer returnNewPlayer;
 	public SkillPosition returnSkillPlayer;
 	public Quaterback returnQuaterback;
 	
-	public SkillPosition returnSkillPlayer(String name, String position, String team, int reliability, int yards, int TDs, int touches) {
-		
-		SkillPosition player1 = new SkillPosition();
-		
-		player1.setName(name);
-		player1.setPosition(position);
-		player1.setTeam(team);
-		player1.setReliabilityScore(reliability);
-		player1.setScrimmageYards(yards);
-		player1.setTouchdowns(TDs);
-		player1.setTouches(touches);
-		
-		return player1;
-	}
 }
