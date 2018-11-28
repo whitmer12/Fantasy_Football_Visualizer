@@ -2,12 +2,11 @@ import java.awt.*;       // Using AWT's Graphics and Color
 import java.awt.event.*; // Using AWT event classes and listener interfaces
 import javax.swing.*;    // Using Swing's components and containers
 
+
 public class Driver extends JFrame {
    // Define canvas size constants
    public static final int CANVAS_WIDTH  = 1500;
    public static final int CANVAS_HEIGHT = 750;
-  
-   FantasyPlayer player1 = new FantasyPlayer();
  
    public Driver(){
 
@@ -72,7 +71,7 @@ public class Driver extends JFrame {
 	   }
 	   
 	   private void createPlayer() {
-		   p1 = new CreatePlayer(playerName.getText(), playerPosition.getText(), playerTeam.getText(), playerYards.getText(), playerTouchdowns.getText(), playerAttempts.getText(), week.getText());
+		   p1 = new CreatePlayer(playerName.getText(), playerPosition.getText(), playerTeam.getText(), playerYards.getText(), playerTouchdowns.getText(), playerAttempts.getText());
 	   }
  	  	   
 	   public void actionPerformed(ActionEvent e) {
@@ -82,7 +81,7 @@ public class Driver extends JFrame {
 		   
 		   Container cp = getContentPane();
 		   
-		   DrawGraphs frame2 = new DrawGraphs(p1);
+		   DrawGraphs frame2 = new DrawGraphs(p1,Integer.valueOf(week.getText()));
 		   cp.add(frame2);
 		   
 		   cp.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -100,6 +99,7 @@ public class Driver extends JFrame {
    public class DrawGraphs extends JPanel {
 	   
 	   CreatePlayer player1;
+	   int week;
 	   /*
 	    * TODO: put up first page with certain amount of input boxes
 	    * put a button click to submit for new player
@@ -107,8 +107,9 @@ public class Driver extends JFrame {
 	    */
 	   
 	   
-	   public DrawGraphs(CreatePlayer player1) {
+	   public DrawGraphs(CreatePlayer player1, int week) {
 		   this.player1 = player1;
+		   this.week = week;
 	   }
 
 	/*
@@ -122,13 +123,20 @@ public class Driver extends JFrame {
 	   
 	   private void drawGraph(int x1, int x2, int y1, int y2, Graphics g) {
 		   
-		  /*
-		   * TODO: Draw filled red ovals (really circles) wherever there belongs a point
-		   * TODO: Draw red lines between the players' point values
-		   * How to set color and then draw an oval:
-		   * g.setColor(Color.RED);
-		   * g.fillOval(300, 310, 30, 50);
-		   */
+		  if(player1.position.equalsIgnoreCase("QB")) {
+			  g.drawString(player1.hmQ.get(player1.position).getName(), 900, 500);
+			  g.drawString("QuaterBack", 900, 525);
+		  }else {
+			  g.drawString(player1.hmSP.get(player1.position).getName(), 900, 500);
+			  if(player1.position.equalsIgnoreCase("RB")) {
+				  g.drawString("Running Back", 900, 525);
+			  }else
+			  if(player1.position.equalsIgnoreCase("WR")) {
+				  g.drawString("Wide Reciever", 900, 525);
+			  }else {
+				  g.drawString("Tight End", 900, 525);
+			  }
+		  }
 		   
 		   g.drawLine(x1, y1, x1, y2);
 		   g.drawLine(x1, y2, x2, y2);		   
@@ -137,26 +145,35 @@ public class Driver extends JFrame {
 		   
 		   for(int i = 0; i < 10; i++) {
 			   g.drawLine(x1-5, xTicIterator, x1+5, xTicIterator);
-			   if(i <= 5) {
-				   g.drawString(String.valueOf(20 - (i*2)), x1-20, xTicIterator+5);
+			   if(x1 == 100 && y1 == 20) {
+				   if(i <= 5) {
+					   g.drawString(String.valueOf(250 - (i*25)), x1-20, xTicIterator+5);
+				   }
+				   else{
+					   g.drawString(String.valueOf(250 - (i*25)), x1-15, xTicIterator+5);
+				   }
+				   xTicIterator += xTicSpace;
 			   }
-			   else{
-				   g.drawString(String.valueOf(20 - (i*2)), x1-15, xTicIterator+5);
+			   else {
+				   if(i <= 5) {
+					   g.drawString(String.valueOf(20 - (i*2)), x1-20, xTicIterator+5);
+				   }
+				   else{
+					   g.drawString(String.valueOf(20 - (i*2)), x1-15, xTicIterator+5);
+				   }
+				   xTicIterator += xTicSpace;
 			   }
-			   xTicIterator += xTicSpace;
 		   }
 		   
 		   int yTicIterator = x2;
 		   
-		   //int currentWeek = 0;
-		   
 		   for(int i = 0; i < 4; i++) {
 			   g.drawLine(yTicIterator, y2+5, yTicIterator, y2-5);
-			   //g.drawString(String.valueOf(currentWeek - i), yTicIterator-3, y2+15);
-			   yTicIterator -= yTicSpace;
-			   if(i == 3) {
-				   //g.drawString(String.valueOf(currentWeek - i - 1), yTicIterator-3, y2+15);
+			   if(i == 0) {
+				   g.drawString(String.valueOf(week - i), yTicIterator-3, y2+15);
 			   }
+			   yTicIterator -= yTicSpace;
+			   g.drawString(String.valueOf(week - i - 1), yTicIterator-3, y2+15);
 		   }
 		   
 	   }
@@ -171,13 +188,44 @@ public class Driver extends JFrame {
 		 int xOuterBound = xInnerBound + xRange;
 		 int yInnerBound = 20;
 		 int yOuterBound = yInnerBound + yRange;
-		 //just for demo
-		 g.drawString(String.valueOf(player1.getWeek()), 500, 50);
+		 
+		 g.drawString("Yards", yInnerBound + 300, xInnerBound - 90);
+		 g.drawString("Week", yInnerBound + 320, xInnerBound + 250);
+
+		 
+		 g.setColor(Color.RED);
+		 
+		 for(int i = 0; i < 5; i++) {
+			 if(player1.position.equalsIgnoreCase("QB")) {
+				 
+				 //Fantasy Points by week
+				 //starts at 4 weeks ago (ticSpace * 0)
+				 //goes to next week (ticSpace * 4)
+				 
+				 g.fillOval(xInnerBound + (yTicSpace * i) - 3, (int) (yInnerBound + ((250 - player1.hmQ.get(player1.position).getPassingYards()[i]))*1.2) - 3, 6, 6);
+				 
+				 //Draws the 4 lines between the 5 points
+				 //starts between 4 and 3 weeks ago
+				 //Goes until predicted next week
+				 if(i != 4) {
+					 
+					 g.drawLine(xInnerBound + (yTicSpace * i), (int) (yInnerBound + ((250 - player1.hmQ.get(player1.position).getPassingYards()[i]) * 1.2)), xInnerBound + (yTicSpace * (i+1)), (int) (yInnerBound + ((250 - player1.hmQ.get(player1.position).getPassingYards()[i+1]) * 1.2)));
+				 
+				 }
+			 }
+			 else {
+				 g.fillOval(xInnerBound + (yTicSpace * i) - 3, (int) (yInnerBound + ((250 - player1.hmSP.get(player1.position).getScrimmageYards()[i]) * 1.2)) - 3, 6, 6);
+				 
+				 if(i != 4) {
+					 g.drawLine(xInnerBound + (yTicSpace * i), (int) (yInnerBound + ((250 - player1.hmSP.get(player1.position).getScrimmageYards()[i]) * 1.2)),  xInnerBound + (yTicSpace * (i+1)), (int) (yInnerBound + ((250 - player1.hmSP.get(player1.position).getScrimmageYards()[i+1]) * 1.2)));
+				 }
+			 }
+		 }
+		 
+		 
+		 g.setColor(Color.BLACK);
+		 
 		 drawGraph(xInnerBound, xOuterBound, yInnerBound, yOuterBound, g);
-		 /*
-		 g.drawLine(30, 30, 30, 300);
-         g.drawLine(30, 300, 530, 300);
-         */
 	   }
 	   
 	   private void drawGraph2(Graphics g) {
@@ -185,6 +233,41 @@ public class Driver extends JFrame {
 		 int xOuterBound = xInnerBound + xRange;
 		 int yInnerBound = 20;
 		 int yOuterBound = yInnerBound + yRange;
+		 
+		 g.drawString("Reliability Score", yInnerBound + 300, xInnerBound - 360);
+		 g.drawString("Week", yInnerBound + 320, xInnerBound - 35);
+		 
+		 g.setColor(Color.RED);
+		 int fantasyPoints = 0;
+		 int nextFantasyPoints = 0;
+		 for(int i = 0; i < 5; i++) {
+			 if(player1.position.equalsIgnoreCase("QB")) {
+				 
+				 //Fantasy Points by week
+				 //starts at 4 weeks ago (ticSpace * 0)
+				 //goes to next week (ticSpace * 4)
+				 fantasyPoints = (int) ((player1.hmQ.get(player1.position).getPassingTouchdowns()[i]*4) + (player1.hmQ.get((player1).position).getPassingYards()[i] / 25));
+				 g.fillOval(xInnerBound + (yTicSpace * i) - 3, (int) (yInnerBound + ((20 - fantasyPoints) * 15)) - 3, 6, 6);
+				 
+				 //Draws the 4 lines between the 5 points
+				 //starts between 4 and 3 weeks ago
+				 //Goes until predicted next week
+				 if(i != 4) {
+					 nextFantasyPoints = (int) ((player1.hmQ.get(player1.position).getPassingTouchdowns()[i+1]*4) + (player1.hmQ.get((player1).position).getPassingYards()[i+1] / 25));
+					 g.drawLine(xInnerBound + (yTicSpace * i), (int) (yInnerBound + ((20 - fantasyPoints) * 15)), xInnerBound + (yTicSpace * (i+1)), (int) (yInnerBound + ((20 - nextFantasyPoints) * 15)));
+				 }
+			 }else {
+				 fantasyPoints = (int) ((player1.hmSP.get(player1.position).getTouchdowns()[i]*6) + (player1.hmSP.get(player1.position).getScrimmageYards()[i] / 10));
+				 g.fillOval(xInnerBound + (yTicSpace * i) - 3, (int) (yInnerBound + ((20 - fantasyPoints) * 15)) - 3, 6, 6);
+				 
+				 if(i != 4) {
+					 nextFantasyPoints = (int) ((player1.hmSP.get(player1.position).getTouchdowns()[i+1]*6) + (player1.hmSP.get(player1.position).getScrimmageYards()[i+1]/10));
+							 g.drawLine(xInnerBound + (yTicSpace * i), (int) (yInnerBound + ((20 - fantasyPoints) * 15)), xInnerBound + (yTicSpace * (i+1)), (int) (yInnerBound + ((20 - nextFantasyPoints) * 15)));
+				 }
+			 }
+		 }
+		 
+		 g.setColor(Color.BLACK);
 		 
 		 drawGraph(xInnerBound, xOuterBound, yInnerBound, yOuterBound, g);
 
@@ -197,6 +280,39 @@ public class Driver extends JFrame {
 		int yInnerBound = 380;
 		int yOuterBound = yInnerBound + yRange;
 		 
+		g.drawString("Fantasy Points", yInnerBound + 600, xInnerBound - 80);
+		g.drawString("Week", yInnerBound + 610, xInnerBound + 250);
+		
+		g.setColor(Color.RED);
+		 
+		for(int i = 0; i < 5; i++) {
+			 if(player1.position.equalsIgnoreCase("QB")) {
+				 
+				 //reliability by week
+				 //starts at 4 weeks ago (ticSpace * 0)
+				 //goes to next week (ticSpace * 4)
+				 
+				 g.fillOval(xInnerBound + (yTicSpace * i) - 3, (int) (yInnerBound + ((20 - player1.hmQ.get(player1.position).getReliabilityScore()[i]) * 15)) - 3, 6, 6);
+				 
+				 //Draws the 4 lines between the 5 points
+				 //starts between 4 and 3 weeks ago
+				 //Goes until predicted next week
+				 if(i != 4) {
+					 g.drawLine(xInnerBound + (yTicSpace * i), (int) (yInnerBound + ((20 - player1.hmQ.get(player1.position).getReliabilityScore()[i]) * 15)), xInnerBound + (yTicSpace * (i+1)), (int) (yInnerBound + ((20 - player1.hmQ.get(player1.position).getReliabilityScore()[i+1]) * 15)));
+				 }
+			 }
+			 else {
+				 
+				 g.fillOval(xInnerBound + (yTicSpace * i) - 3, (int) (yInnerBound + ((20 - player1.hmSP.get(player1.position).getReliabilityScore()[i]) * 15)) - 3, 6, 6);
+				 
+				 if(i != 4) {
+					 g.drawLine(xInnerBound + (yTicSpace * i), (int) (yInnerBound + ((20 - player1.hmSP.get(player1.position).getReliabilityScore()[i]) * 15)), xInnerBound + (yTicSpace * (i+1)), (int) (yInnerBound + ((20 - player1.hmSP.get(player1.position).getReliabilityScore()[i+1]) * 15)));
+				 }
+				 
+			 }
+		 }
+		 g.setColor(Color.BLACK);
+		
 		drawGraph(xInnerBound, xOuterBound, yInnerBound, yOuterBound, g);
 
 	   }

@@ -1,10 +1,10 @@
 
 public class FantasyPlayer {
 	
-	private String name;
-	private String position;
-	private String team;
-	private int reliabilityScore;
+	protected String name;
+	protected String position;
+	protected String team;
+	protected static int[] reliabilityScore = new int[5];
 	
 	public String getName() {return name;}
 	
@@ -12,7 +12,7 @@ public class FantasyPlayer {
 	
 	public String getTeam() {return team;}
 
-	public int getReliabilityScore() {return reliabilityScore;}
+	public int[] getReliabilityScore() {return reliabilityScore;}
 	
 	public void setName (String name) {this.name = name;}
 	
@@ -20,6 +20,6 @@ public class FantasyPlayer {
 	
 	public void setTeam(String team) {this.team = team;}	
 	
-	public void setReliabilityScore(int reliabilityScore) {this.reliabilityScore = reliabilityScore;}
+	public void setReliabilityScore(int[] reliabilityScore) {this.reliabilityScore = reliabilityScore;}
 
 }
