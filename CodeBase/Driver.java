@@ -134,7 +134,7 @@ public class Driver extends JFrame {
 			  if(player1.position.equalsIgnoreCase("WR")) {
 				  g.drawString("Wide Reciever", 900, 525);
 			  }else {
-				  g.drawString("Tight End", 900, 525);
+				  g.drawString("Tight End	", 900, 525);
 			  }
 		  }
 		   
